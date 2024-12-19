@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catch the Dot Game</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #fff;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 36px;
+    }
+    .game-area {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      background: #fff;
+      border: 2px solid #000;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .dot {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: red;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .score {
+      margin-top: 20px;
+      font-size: 24px;
+    }
+    .play-again {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 18px;
+      background: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none;
+    }
+    .play-again:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+<body>
+  <h1>Catch the Dot</h1>
+  <div class="game-area" id="gameArea"></div>
+  <div class="score">Score: <span id="score">0</span></div>
+  <button class="play-again" id="playAgain">Play Again</button>
+
+  <script>
+    const gameArea = document.getElementById('gameArea');
+    const scoreDisplay = document.getElementById('score');
+    const playAgainButton = document.getElementById('playAgain');
+    let score = 0;
+    let gameActive = true;
+
+    function spawnDot() {
+      if (!gameActive) return;
+
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      dot.style.top = Math.random() * 370 + 'px';
+      dot.style.left = Math.random() * 370 + 'px';
+      
+      dot.addEventListener('click', () => {
+        score++;
+        scoreDisplay.textContent = score;
+        dot.remove();
+      });
+
+      gameArea.appendChild(dot);
+
+      setTimeout(() => {
+        if (dot.parentElement) {
+          dot.remove();
+        }
+        spawnDot();
+      }, 1000);
+    }
+
+    function endGame() {
+      gameActive = false;
+      playAgainButton.style.display = 'block';
+    }
+
+    setTimeout(endGame, 30000); // End game after 30 seconds
+    spawnDot();
+
+    playAgainButton.addEventListener('click', () => {
+      score = 0;
+      scoreDisplay.textContent = score;
+      gameActive = true;
+      playAgainButton.style.display = 'none';
+      spawnDot();
+    });
+  </script>
+</body>
+</html>
